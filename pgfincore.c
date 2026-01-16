@@ -62,6 +62,14 @@ PG_MODULE_MAGIC;
 #else
 #define FINCORE_BITS    2
 #endif
+
+#if PG_MAJOR_VERSION < 1800
+typedef char* RelPathStr;
+#define relpath_cstr(x) x
+#else
+#define relpath_cstr(x) x.str
+#endif
+
 /*
  * pgfadvise_fctx structure is needed
  * to keep track of relation path, segment number, ...
@@ -97,13 +105,6 @@ typedef struct
 	size_t	pagesLoaded;	/* pages loaded */
 	size_t	pagesUnloaded;	/* pages unloaded  */
 } pgfloaderStruct;
-
-#if PG_MAJOR_VERSION < 1800
-typedef char* RelPathStr
-#define relpath_cstr(x) x
-#else
-#define relpath_cstr(x) x.str
-#endif
 
 /*
  * pgfincore_fctx structure is needed
